@@ -1,0 +1,214 @@
+%!TEX program = Xelatex
+\documentclass{article}
+%\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance,mathtools}
+\usepackage{wrapfig}
+\usepackage{mathrsfs, euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage{caption}
+%\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}
+%\usepackage{enumerate}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[vlined,ruled,commentsnumbered,linesnumbered]{algorithm2e}
+\usepackage[ruled,lined,boxed,linesnumbered]{algorithm2e}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{solution}{Solution}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\newcommand{\postscript}[2]
+    {\setlength{\epsfxsize}{#2\hsize}
+    \centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+
+\title{CS222 Homework 1}
+\author{Algorithm Analysis \& Deadline: 2020-09-21 Monday 24:00\\Liu Yanming \ StudentID: 518030910393}
+\date{Exercises for Algorithm Design and Analysis by Li Jiang, 2020 Autumn Semester}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+
+  \item Prove that $\log (\log n) = o(n^k)$, where k is a positive constant. (ps: $\log n$ refers to $\log_2 n$.)
+
+~\\
+\begin{solution}
+$\lim_{x\rightarrow\infty}\dfrac{\log(\log n)}{n^k}=\lim_{x\rightarrow\infty}\dfrac{\dfrac{1}{\log n}\cdot\dfrac{1}{n}}{kn^{k-1}}=\lim_{x\rightarrow\infty}\dfrac{1}{kn^k\log n}=0\Rightarrow \log(\log n)=o(n^k), \forall k>0$.
+\end{solution}
+~\\
+
+\item Prove that for any integer $n^2 -1\;\textgreater\;3$, there is a prime $p$ satisfying $n!\;\textgreater\;p\;\textgreater n$.
+~\\
+\begin{solution}
+  We prove it by induction.\\
+  (i) $n=3$ : $\exists\ p = 5, n! > p > n$;\\
+  (ii) $n = k+1$: by inductive assumption, exists a prime $p$, $k < p < k!$.\\
+    case 1: $p > k+1$, then we have $n  < p < k! < n!$ for $n = k+1$.\\
+    case 2: $p = k+1$, we define $P$ to be the set of primes less than or equal to  $k+1$. Let $q = 1 + \prod_{t\in[1,k+1]\cap P}{t}$.
+    Obviously, $n = k+1 < 1 + 2(k+1) \leq q \leq 1+\dfrac{(k+1)!}{4} < n!$ for $n = k+1$\ (Reason: $p=k+1\in P$, $4\notin P$). If there is no prime in the interval $(n, q)$, then $q$ is a prime, because there is not a prime $p'$ less than $q$ such that $p'|q$.
+    If there is a prime $q'$ in the interval $(n,q)$, then we get it.\\
+    From the two cases above, there exists a prime $p$ satisfying $n < p < n!$ for $n=k+1$.
+    
+\end{solution}
+~\\
+\item Assume that there is a recurrence formula as follows: 
+\begin{equation*}
+	D(x) = \begin{cases}
+	1, &if\;x==1\\
+	3D(x/4) + x - 2, &if\;x\geq2
+	\end{cases}
+\end{equation*}
+Please deduce the non-recursive expression of $D(x)$ and point out its asymptotic complexity. 
+
+~\\
+\begin{solution}
+  By observing, $D(x)$ is approximate to $4x$. Let $F(x) = D(x) - 4x$ then we get $F(x) = 3D\left(\dfrac{x}{4}\right)-3x-2=3F\left(\dfrac{x}{4}\right)-2$. Consider the function $G(x)$ with : (1) $G(0) = F(1) = -3$, (2) $G(x) = 3G(x-1) - 2$. $G(x) - 1 = 3(G(x-1) - 1)$, so $G(x) = -4\cdot3^x+1$.
+  By observing, we can see $F(x) = G(\log_4{x})$, therefore $D(x) = F(x) + 4x = 4x + 1 - 4\cdot 3^{\log_4{x}}$. We can check it easily.  \\
+  Obviously, $D(x) < 4x, \forall x\geq 1$. And we can proof it easily by induction that $x \leq D(x), \forall x\geq 1$. So $D(x) = \Theta(x)$. 
+\end{solution}
+~\\
+\textbf{Update:}\\
+\begin{equation*}
+	D(x) = \begin{cases}
+	1, &if\;\lfloor x \rfloor \leq 1\\
+	3D(x/4) + x - 2, &if\;\lfloor x \rfloor  > 1
+	\end{cases}
+\end{equation*}
+~\\
+\begin{solution}
+  By observing, $D(x)$ is possibly a piecewise function. We use python script to calculate the function values, and we found some law:\\
+  $D(x)$ is linear in the intervals $[2,8), [8,32), [32, 128), [128,512), \cdots$\\
+  The slope of $D(x)$ is $1, 1+0.75, 1+0.75+0.75^2, 1+0.75+0.75^2+0.75^3, \cdots$\\
+  And according to the solution of the original problem, we have: $D(x) = 1+4x-6\cdot3^{\log_4\frac{x}{2}}$, when $x=2\cdot4^k$
+  \\
+  So, we have $x\geq2\rightarrow D(x)=1+4\times(2\cdot4^{\lfloor\log_4{(x/2)}\rfloor})-6\cdot3^{\lfloor\log_4{(x/2)}\rfloor}+(4-3\cdot(\frac{3}{4})^{\lfloor\log_4{(x/2)}\rfloor})(x-2\cdot 4^{\lfloor\log_4{(x/2)}\rfloor})$
+  Simplify it, we get :
+  \begin{equation*}
+    D(x) = \begin{cases}
+    1, &\lfloor x \rfloor \leq 1\\
+    1+4x-3x\cdot\left(\dfrac{3}{4}\right)^{\lfloor\log_4{(x/2)}\rfloor}, &\lfloor x \rfloor > 1\\
+    \end{cases}
+  \end{equation*}
+  We can check it easily.\\
+  Similar to the solution in the original problem, we can prove it by induction that $x \leq D(x) < 4x, \forall x > 0, x \in \mathbb{Z}$.
+  And we can check it easily that $D(x)$ is continuous and linear in intervals $[k,k+1), \forall k\in \mathbb{N}_+$, so we can prove $\forall x>0, x \leq D(x) < 4x$. Therefore, $D(x)=\Theta(x)$.
+\end{solution}
+~\\
+
+\item Use the minimal counterexample principle to prove that for any integer $n \textgreater 10$, there exist integers $i_n\geq0$ and $j_n\geq 0$, such that $n = i_n \times 3 + j_n \times 4$.
+~\\
+\begin{solution}
+  We assume that $n$\ $(n>10)$ is the \textbf{smallest} integer greater than 10 which can \textbf{NOT} be expressed as $n=3\times i_n+4\times j_n$. Obviously $n > 13$, because $11=3\times1+4\times2,\ 12=3\times4+4\times0,\ 13=3\times3+4\times1$.
+  Therefore, $n-3>13-3=10$. We assert $10 < n-3 = 3\times i_{n-3}+4\times j_{n-3}$, because $n$ is the smallest counterexample. Then we have $n=n-3+3=3\times (i_{n-3}+1)+4\times j_{n-3}$. Contradict!
+\end{solution}
+~\\
+
+\item  Analyze the \textbf{average} time complexity of QuickSort in Alg.~\ref{Alg_Quick}.
+
+    \begin{minipage}[t]{0.8\textwidth}
+    \begin{algorithm}[H]
+      \KwIn{An array $A[1,\cdots,n]$}
+      \KwOut{$A[1,\cdots,n]$ sorted nondecreasingly}
+
+      \BlankLine
+      \caption{QuickSort}\label{Alg_Quick}
+
+      %\If{$n \le 1$}{
+      %  \Return\;
+      %}
+
+      $pivot \leftarrow A[n]$; $i \leftarrow 1$\;
+      \For{$j \leftarrow 1$ \KwTo $n-1$}{
+        \If{$A[j] < pivot$}{
+          swap $A[i]$ and $A[j]$\;
+          $i \leftarrow i+1$\;
+        }
+      }
+
+      swap $A[i]$ and $A[n]$\;
+      \lIf{$i>1$}{$\operatorname{QuickSort}(A[1,\cdots,i-1])$}
+      \lIf{$i<n$}{$\operatorname{QuickSort}(A[i+1,\cdots,n])$}
+    \end{algorithm}
+    \end{minipage}
+    
+~\\
+\begin{solution}
+  $\mathbb{E}T(1) = 0; n\geq2\rightarrow \mathbb{E}T(n) = n + \dfrac{1}{n}\left(\sum_{i=1}^{n} \left[\mathbb{E}T(i-1) + \mathbb{E}T(n-i)\right]\right)=n+\dfrac{2}{n}\sum_{i=1}^{n-1}\mathbb{E}T(i)$.\\
+  When $n$ is big enough, 
+  $$
+  \begin{array}{rl}
+    n+\dfrac{2}{n}\sum_{i=1}^{n-1}2i\ln i&=n+2\sum_{i=1}^{n-1}\dfrac{2i}{n}\left(\ln{\dfrac{i}{n}}+\ln n\right)\\
+     &=n+4n\sum_{i=1}^{n-1} \dfrac{i}{n^2}\ln\dfrac{i}{n} + \dfrac{4\ln n}{n}\sum_{i=1}^{n-1} i\\
+     &\approx n + 4n\int_{0}^1 x\ln x\ \mathtt{d}x+\dfrac{4\ln n}{n}\cdot\dfrac{n^2}{2}\\
+     &=n+4n\cdot(-\dfrac{1}{4})+2n\ln n = 2n\ln n
+  \end{array}
+  $$
+  So, there is reason to believe that when $n$ is big enough $\mathbb{E}T(n)\approx 2n\ln n$ and $\mathbb{E}T(n)=\Theta(n\log n)$ 
+  ~\\
+  Discussing with classmates, I get a better solution:\\
+  $\mathbb{E}T(n)=n+\dfrac{2}{n}\sum_{i=1}^{n-1}\mathbb{E}T(i)\Rightarrow n\mathbb{E}T(n)=n^2+2\sum_{i=1}^{n-1}\mathbb{E}T(i)$ (1)\\
+  and $(n+1)\mathbb{E}T(n+1)=(n+1)^2+2\sum_{i=1}^n\mathbb{E}T(i)$ (2). Therefore, (2)-(1): $\dfrac{\mathbb{E}T(n+1)-1}{n+2}=\dfrac{\mathbb{E}T(n)-1}{n+1}+\dfrac{2}{n+2}$
+  Therefore, $\dfrac{\mathbb{E}T(n+1)-1}{n+2}\sim 2\ln (n+1)\Rightarrow \mathbb{E}T(n)\sim 2n\ln n\Rightarrow \mathbb{E}T(n)=\Theta(n\log n)$.
+\end{solution}
+~\\
+
+\item Rank the following functions by order of growth with explanations: that is, find an arrangement $g_1, g_2, \ldots , g_{k}$ of the functions $g_1 = \Omega(g_2), g_2 = \Omega(g_3), \ldots, g_{k-1} = \Omega(g_{k})$.  Partition your list into equivalence classes such that functions $f(n)$ and $g(n)$ are in the same class if and only if $f(n) = \Theta(g(n))$. Use symbols ``$=$'' and ``$\prec$'' to order these functions appropriately. (ps: $\log n$ refers to $\log_2 n$.)
+    $$
+    \begin{array}{ccccc}
+        2^{\log n} \quad & \quad (\log n)^{\ln n} \quad & \quad n^2 \quad & \quad n! \quad & \quad (n - 1)! \\
+        2^n \quad & \quad n^3 \quad & \quad \log^2 n \quad & \quad e^n \quad & \quad 2^{2^n} \\
+        \log\log n \quad & \quad (n+1)\cdot 2^n \quad & \quad n \quad & \quad \log {(n^2 - n)} \quad & \quad 2^{\ln n} \\
+    \end{array}
+    $$
+    
+~\\
+\begin{solution}
+  $$\begin{array}{l}\log\log n\prec \log (n^2-n) \prec \log^2 n \prec 2^{\ln n} \prec n = 2^{\log n} \prec n^2\\
+  \prec n^3 \prec (\log n)^{\ln n} \prec 2^n \prec (n+1)\cdot 2^n\prec e^n \prec (n-1)! \prec n! \prec 2^{2^n}
+  \end{array}$$
+Explanations:
+\begin{enumerate}
+  \item $\lim_{x\rightarrow\infty}\dfrac{\log\log n}{\log(n^2-n)}=\lim_{x\rightarrow\infty}\dfrac{n-1}{(2n-1)\log n}=0$.
+  \item $\log(n^2-n)<2\log n\prec \log^2 n$ it is the same with $n \prec n^2$
+  \item $2^{\ln n}=2^\frac{\log n}{\log e}= n^{\frac{1}{\log e}}\Rightarrow \log^2 n\prec n^\frac{1}{\log e}\prec n$ because $\lim_{x\rightarrow\infty}\dfrac{\log^2 n}{n^a}=\lim_{x\rightarrow\infty}\dfrac{2\log n}{an^a}=0, a>0$.
+  \item $2^{\log n}=2^{\log_2 n} = n$
+  \item $n\prec n^2\prec n^3$ is obvious enough.
+  \item when $\log n > e^4$, $(\log n)^{\ln n}>(e^4)^{\ln n}=(e^4)^{\frac{\log_{e^4} n}{\log_{e^4} e}}=n^4\succ n^3$
+  \item $\ln n\log\log n \prec n \Rightarrow \forall c>0, \ln n\log\log n < c n\Rightarrow \lim_{x\rightarrow\infty}\dfrac{(\log n)^{\ln n}}{2^n}=\lim_{x\rightarrow\infty}\dfrac{2^{\ln n\log\log n}}{2^n}$\\$<\lim_{x\rightarrow\infty}\dfrac{1}{2^{0.9n}}=0$
+  \item $\lim_{x\rightarrow\infty}\dfrac{2^n}{(n+1)\cdot2^n}=0$
+  \item $\lim_{x\rightarrow\infty}\dfrac{(n+1)\cdot2^n}{e^n}=\lim_{x\rightarrow\infty}\dfrac{n+1}{(e/2)^n}=0$
+  \item $e^3<27$, so take $n > 28 > 27 > e^3, (n-1)! > e^{3(n-1-27)} = e^{3n-28}> e^{2n} \succ e^n$
+  \item $\lim_{x\rightarrow\infty}\dfrac{(n-1)!}{n!}=0$
+  \item $\log (n!) < n\log n < n^2 \prec 2^n \Rightarrow \log(n!) < 0.1\cdot 2^n$ when $n$ is big enough.\\
+        $\lim_{x\rightarrow\infty}\dfrac{n!}{2^{2^n}}=\lim_{x\rightarrow\infty}\dfrac{2^{\log(n!)}}{2^{2^n}}=\lim_{x\rightarrow\infty}\dfrac{1}{2^{2^n-\log(n!)}}<\lim_{x\rightarrow\infty}\dfrac{1}{2^{0.9\cdot 2^n}}=0$
+\end{enumerate}
+\end{solution}
+~\\
+
+
+\textbf{Remark}: You need to upload your .pdf file.
+\end{enumerate}
+
+\end{document}

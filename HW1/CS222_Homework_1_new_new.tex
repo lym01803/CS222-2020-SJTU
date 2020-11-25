@@ -1,0 +1,127 @@
+%!TEX program = Xelatex
+\documentclass{article}
+%\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance,mathtools}
+\usepackage{wrapfig}
+\usepackage{mathrsfs, euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage{caption}
+%\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}
+%\usepackage{enumerate}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[vlined,ruled,commentsnumbered,linesnumbered]{algorithm2e}
+\usepackage[ruled,lined,boxed,linesnumbered]{algorithm2e}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{solution}{Solution}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\newcommand{\postscript}[2]
+    {\setlength{\epsfxsize}{#2\hsize}
+    \centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+
+\title{CS222 Homework 1}
+\author{Algorithm Analysis \& Deadline: 2020-09-21 Monday 24:00}
+\date{Exercises for Algorithm Design and Analysis by Li Jiang, 2020 Autumn Semester}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+
+\item Prove that $\log (\log n) = o(n^k)$, where k is a positive constant. (ps: $\log n$ refers to $\log_2 n$.)
+
+~\\
+~\\
+
+\item Prove that for any integer $n^2 -1\;\textgreater\;3$, there is a prime $p$ satisfying $n!\;\textgreater\;p\;\textgreater n$.
+
+~\\
+~\\
+\item Assume that there is a recurrence formula as follows: 
+\begin{equation*}
+	D(x) = \begin{cases}
+	1, &if\;\lfloor x \rfloor \leq 1\\
+	3D(x/4) + x - 2, &if\;\lfloor x \rfloor  > 1
+	\end{cases}
+\end{equation*}
+Please deduce the non-recursive expression of $D(x)$ and point out its asymptotic complexity. 
+
+~\\
+~\\
+
+
+\item Use the minimal counterexample principle to prove that for any integer $n \textgreater 10$, there exist integers $i_n\geq0$ and $j_n\geq 0$, such that $n = i_n \times 3 + j_n \times 4$.
+~\\
+~\\
+
+\item  Analyze the \textbf{average} time complexity of QuickSort in Alg.~\ref{Alg_Quick}.
+
+    \begin{minipage}[t]{0.8\textwidth}
+    \begin{algorithm}[H]
+      \KwIn{An array $A[1,\cdots,n]$}
+      \KwOut{$A[1,\cdots,n]$ sorted nondecreasingly}
+
+      \BlankLine
+      \caption{QuickSort}\label{Alg_Quick}
+
+      %\If{$n \le 1$}{
+      %  \Return\;
+      %}
+
+      $pivot \leftarrow A[n]$; $i \leftarrow 1$\;
+      \For{$j \leftarrow 1$ \KwTo $n-1$}{
+        \If{$A[j] < pivot$}{
+          swap $A[i]$ and $A[j]$\;
+          $i \leftarrow i+1$\;
+        }
+      }
+
+      swap $A[i]$ and $A[n]$\;
+      \lIf{$i>1$}{$\operatorname{QuickSort}(A[1,\cdots,i-1])$}
+      \lIf{$i<n$}{$\operatorname{QuickSort}(A[i+1,\cdots,n])$}
+    \end{algorithm}
+    \end{minipage}
+    
+~\\
+~\\
+\newpage
+\item Rank the following functions by order of growth with explanations: that is, find an arrangement $g_1, g_2, \ldots , g_{k}$ of the functions $g_1 = \Omega(g_2), g_2 = \Omega(g_3), \ldots, g_{k-1} = \Omega(g_{k})$.  Partition your list into equivalence classes such that functions $f(n)$ and $g(n)$ are in the same class if and only if $f(n) = \Theta(g(n))$. Use symbols ``$=$'' and ``$\prec$'' to order these functions appropriately. (ps: $\log n$ refers to $\log_2 n$.)
+    $$
+    \begin{array}{ccccc}
+        2^{\log n} \quad & \quad (\log n)^{\ln n} \quad & \quad n^2 \quad & \quad n! \quad & \quad (n - 1)! \\
+        2^n \quad & \quad n^3 \quad & \quad \log^2 n \quad & \quad e^n \quad & \quad 2^{2^n} \\
+        \log\log n \quad & \quad (n+1)\cdot 2^n \quad & \quad n \quad & \quad \log {(n^2 - n)} \quad & \quad 2^{\ln n} \\
+    \end{array}
+    $$
+    
+~\\
+~\\
+
+
+\textbf{Remark}: You need to upload your .pdf file.
+\end{enumerate}
+
+\end{document}
