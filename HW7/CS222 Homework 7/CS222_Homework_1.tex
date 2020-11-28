@@ -185,7 +185,7 @@
             \item $\Leftarrow$: Obviously.
             \item $\Rightarrow$: Consider two cases: \begin{itemize}
                 \item $c^*\in S_1$, go straight.
-                \item $c^*\notin S_1$. We have $Sum(S_1)=X=2^m+l$, where $l\geq 0$. We find a coin $c_{m_1}\in S_1$ which has the minimum denomination $2^a$ in $S_1$, $2^a\leq 2^m$. We have $0\equiv Sum(S_1)\equiv 2^m+l\equiv l\mod{2^a}$. If $l>0$, then we have $l\geq 2^a$, and then we have $Sum(S_1\setminus c_{m_1})=2^m+l'$, where $l'=l-2^a\geq 0$. If $l'>0$, repeat the process above. Finally we will get $Sum(S_1\setminus c_{m_1}\setminus c_{m_2}\setminus\cdots\setminus c_{m_k}) = 2^m+0$. We construct a solution $S_2=\{c_{m_1},c_{m_2},\cdots,c_{m_k}, c^*\}$.
+                \item $c^*\notin S_1$. We have $Sum(S_1)=X=2^m+l$, where $l\geq 0$. We find a coin $c_{m_1}\in S_1$ which has the minimum denomination $2^a$ in $S_1$, $2^a\leq 2^m$. We have $0\equiv Sum(S_1)\equiv 2^m+l\equiv l\mod{2^a}$. If $l>0$, then $l\geq 2^a$, and then we have $Sum(S_1\setminus c_{m_1})=2^m+l'$, where $l'=l-2^a\geq 0$. If $l'>0$, repeat the process above (select and remove the minimum coin $c_{m_2}$ in $S_1\setminus c_{m_1}$). Finally we will get $Sum(S_1\setminus c_{m_1}\setminus c_{m_2}\setminus\cdots\setminus c_{m_k}) = 2^m+0$. We construct a solution $S_2=\{c_{m_1},c_{m_2},\cdots,c_{m_k}, c^*\}$.
             \end{itemize}
         \end{itemize}
         This lemma confirms the correctness of the greedy algorithm below. \begin{itemize}
@@ -194,7 +194,7 @@
             \item [3.] Discuss each coin in the order. If the coin $c$ has a denomination $2^k \leq X$, then select this coin and $X\leftarrow X-2^k$.
             \item [4.] Finally, we check whether $X=0$. If $X=0$, there is a solution, otherwise no solution.
         \end{itemize}
-    \item [(c)] NP-complete. Proof: \textbf{Subset Sum} $\leq_P$ \textbf{(c)}.\\Reason: For a \textbf{Subset Sum} problem, we have a set of numbers with total sum $S$, and want to find a subset whose numbers have a sum $S_1$. We add a additional number $|S-2S_1|$, and then the problem can be solved by (c).
+    \item [(c)] NP-complete. Proof: \textbf{Subset Sum} $\leq_P$ \textbf{(c)}.\\Reason: For a \textbf{Subset Sum} problem, we have a set of numbers $n_1,n_2,\cdots,n_m$ with total sum $S$, and want to find a subset whose numbers have a sum $S_1$. We construct a problem (c) with checks' amounts $n_1,n_2,\cdots,n_m, |S-2S_1|$, and then the two problem have a solution concurrently.
     \item [(d)] NP-complete. Proof: \textbf{(c)} $\leq_P$ \textbf{(d)}. \\Reason: For a problem (c) with check amounts $c_1,c_2,\cdots,c_n$, we construct a problem (d) with check amounts $200c_1,200c_2,\cdots,200c_n$. They have a solution concurrently.
 \end{itemize}
 ~\\
