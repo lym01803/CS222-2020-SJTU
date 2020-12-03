@@ -95,10 +95,36 @@ A greedy algorithm you might use for this is the following. Start with an empty 
 say that $H$ is a hitting set if $H \cap B_i$ is not empty for each $i$.) Let $b = max_i |B_i|$ denote the maximum size of any of the sets $B_1, B_2, ..,, B_m$. Give a polynomial-time approximation algorithm for this problem that finds a hitting set whose total weight is at most $b$ times the minimum possible.
 
 
+~\\\textbf{Solution}.\\
+\begin{spacing}{1.5}
+    This problem is equivalent to a $0-1$ LP problem:
+    $$
+    \min {\sum_i w_i}\ \ \ 
+    s.t.
+    \left\{
+        \begin{array}{c}
+            w_i\in\{0, 1\},\ \forall 1\leq i\leq n\\
+            \sum_{i:a_i\in B_k} w_i \geq 1,\ \forall 1\leq k \leq m
+        \end{array}
+    \right.
+    $$
+An approximate real number LP problem which can be solve in polynomial time:
+    $$
+    \min {\sum_i x_i}\ \ \ 
+    s.t.
+    \left\{
+        \begin{array}{c}
+            0\leq x_i\leq 1,\ \forall 1\leq i\leq n\\
+            \sum_{i:a_i\in B_k} x_i \geq 1,\ \forall 1\leq k \leq m
+        \end{array}
+    \right.
+    $$
+Find the optimal solution $x^*=(x_1^*,x_2^*,\cdots,x_n^*)$ of the real number LP problem above. Construct a feasible solution for the $0-1$ LP problem: $w_i \leftarrow 1\{x_i^*\geq \dfrac{1}{b}\}$. (Because the $\max_{i:a_i\in B_k} x_i^*\geq \dfrac{1}{|B_k|}\geq \dfrac{1}{b}$, the solution $w=(w_1,w_2,\cdots,w_n)$ is guaranteed feasible.) Assume the optimal solution for the $0-1$ LP problem is $w^*=(w_1^*,w_2^*,\cdots,w_n^*)$, then we have $\sum_{i}w_i \leq \sum_{i} bx_i^*\leq \sum_{i} bw_i^*=b\sum_{i} w_i^*$. 
+\end{spacing}
 ~\\
 ~\\
 ~\\
-~\\
+
 
 \item Suppose you’re consulting for a biotech company that runs experiments on two expensive high-throughput assay machines, each identical, which we’ll label $M_1$ and $M_2$. Each day they have a number of jobs that they need to do, and each job has to be assigned to one of the two machines. The problem they need help on is how to assign the jobs to machines to keep the loads balanced each day. The problem is stated as follows. 
 
