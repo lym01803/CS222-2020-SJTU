@@ -138,6 +138,18 @@ A previous consultant showed that the problem is NP-hard (by a reduction from Su
     \item Finally, they wonder if they should work on better algorithms. Give an example in which the local search algorithm above will not lead to an optimal solution.
 \end{enumerate}
 
+~\\
+\textbf{Solution.}\\
+\begin{spacing}{1.5}
+\begin{itemize}
+    \item [(a)] 
+        Assume $T_2>2T_1$. There are at least two jobs in $B$, for $t_j\leq \dfrac{1}{2}\sum_{i=1}^n t_i$. Assume the job with the least processing time in B is job $j$, $t_j\leq \dfrac{T_2}{2} < T_2-T_1$. After moving job $j$ from B to A, $T_1-T_2<T_2'-T_1'=T_2-T_1-2t_j<T_2-T_1$. So $|T_2'-T_1'|<|T_2-T_1|$, conflictive with the termination of the algorithm. So $T_2\leq 2T_1$. And similarly, $T_1\leq 2T_2$. Therefore, $\dfrac{1}{2}T_1\leq T_2\leq 2T_1$.
+    \item [(b)] 
+        Assume the job $j$ being moved more than once. The first movement, say A $\rightarrow$ B, occured at time $a$, and the second movement, say B $\rightarrow$ A, occured at time $b$. We have $T_1^a-T_2^a>t_j$ and $T_2^b-T_1^b>t_j$. There must be a time $c$, $a\leq c < c+1 \leq b$, s.t. $T_1^c-T_2^c>0$ and $T_2^{c+1} - T_1^{c+1} > 0$. The absolute difference is decreasing, so $T_1^c-T_2^c>T_2^{c+1}-T_1^{c+1}\geq T_2^b-T_1^b>t_j$. Assume the job moved from A to B at time $c$ has a processing time $t_c$, $t_c<T_1^c-T_2^c\leq T_1^a-T_2^a$. Then $2t_c = (T_1^c-T_2^c) - (T_1^{c+1} - T_2^{c+1})>2t_j$, i.e. $T_1^a-T_2^a>t_c>t_j$. So at time $a$, we should move job $c$ not job $j$. Contradictive! So each job will move at most once.
+    \item [(c)] This approximate algorithm executes in a certain fixed policy (select the largest one or select the smallest one or select according to an other policy). If the algorithm move the largest possible job each turn, I can Construct an example, where the jobs are given in such an order $t_1=5,t_2=4,t_3=3,t_4=2$. At the beginning, A $=(t_1=5,t_2=4)$ and B $=(t_3=3,t_4=2)$, which is also the final state of this algorithm. However the optimal solution is A $=(t_1=5,t_4=2)$, B $=(t_2=4,t_3=3)$. How about selecting a random valid job to move in each turn? It may be quite difficult to give a counter example. 
+\end{itemize}
+\end{spacing}
+
 \end{enumerate}
 
 Remark: You need to upload your .pdf file.
